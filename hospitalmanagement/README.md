@@ -1,6 +1,5 @@
 
 # Hospital Management
-![developer](https://img.shields.io/badge/Developed%20By%20%3A-Sumit%20Kumar-red)
 ---
 ## screenshots
 ### Homepage
@@ -51,7 +50,7 @@ py manage.py makemigrations
 py manage.py migrate
 py manage.py runserver
 ```
-- Now enter following URL in Your Browser Installed On Your Pc
+- Now enter following URL in Your Browser Installed On Your Pc(local)
 ```
 http://127.0.0.1:8000/
 ```
@@ -67,15 +66,7 @@ EMAIL_RECEIVING_USER = 'youremail@gmail.com'
 ```
 https://myaccount.google.com/lesssecureapps
 ```
-## Drawbacks/LoopHoles
-- Any one can be Admin. There is no Approval required for admin account. So you can disable admin signup process and use any logic like creating superuser.
-- There should be at least one doctor in hospital before admitting patient. So first add doctor.
-- On update page of doctor/patient you must have to update password.
-
-## Disclaimer
-This project is developed for demo purpose and it's not supposed to be used in real application.
-
 ## Feedback
-Any suggestion and feedback is welcome. You can message me on facebook
-- [Contact on Facebook](https://fb.com/sumit.luv)
-- [Subscribe my Channel LazyCoder On Youtube](https://youtube.com/lazycoders)
+Any suggestion and feedback is welcome. You can message me on LinkedIn
+- [Contact on LinkedIn]
+- (https://www.linkedin.com/in/shaiksaiteja)
