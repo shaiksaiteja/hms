@@ -1,0 +1,36 @@
+pipeline{
+    agent any
+    environment{
+        DOCKERHUB_CREDENTIALS = credentials('saiteja_jen_docker')
+    }
+    stages{
+        stage('SCM Checkout'){
+            steps{
+                git 'https://github.com/shaiksaiteja/hms.git'
+            }
+        }
+
+        stage(' Build Docker img'){
+            steps{
+                sh 'docker build -t shaiksaiteja/ibmproject:$BUILD_NUMBER .'
+            }
+        }
+
+        stage('LOGIN TO DOCKERHUB'){
+            steps{
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+
+        stage('PUSH IMAGE'){
+            steps{
+                sh 'docker push shaiksaiteja/ibmproject:$BUILD_NUMBER '
+            }
+        }
+    }
+post{
+    always{
+        sh 'docker logout'
+    }
+    }
+}
