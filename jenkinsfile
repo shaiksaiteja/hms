@@ -4,6 +4,10 @@ pipeline{
         DOCKERHUB_CREDENTIALS = credentials('saiteja_jen_docker')
     }
     stages{
+        stage('Clean workspace') {
+    deleteDir()
+    sh 'ls -lah'
+}
         stage('SCM Checkout'){
             steps{
                 git 'https://github.com/shaiksaiteja/hms'
