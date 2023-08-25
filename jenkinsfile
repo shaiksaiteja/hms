@@ -1,36 +1,43 @@
-pipeline{
+pipeline {
     agent any
-    environment{
+    environment {
         DOCKERHUB_CREDENTIALS = credentials('saiteja_jen_docker')
+        IMAGE_NAME = "shaiksaiteja/ibmproject:${env.BUILD_NUMBER}"
     }
-    stages{
-        stage('SCM Checkout'){
-            steps{
-                git 'https://github.com/shaiksaiteja/hms'
+    
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                git url: 'https://github.com/shaiksaiteja/hms', branch: 'main'
             }
         }
-
-        stage(' Build Docker img'){
-            steps{
-                sh 'docker build -t shaiksaiteja/ibmproject:$BUILD_NUMBER .'
+        
+        stage('Build Docker img') {
+            steps {
+                script {
+                    docker.build IMAGE_NAME, '.' 
+                }
             }
         }
-
-        stage('LOGIN TO DOCKERHUB'){
-            steps{
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+        
+        stage('LOGIN TO DOCKERHUB') {
+            steps {
+                withCredentials([string(credentialsId: 'saiteja_jen_docker', variable: 'DOCKERHUB_CREDENTIALS_PSW')]) {
+                    sh "echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                }
             }
         }
-
-        stage('PUSH IMAGE'){
-            steps{
-                sh 'docker push shaiksaiteja/ibmproject:$BUILD_NUMBER '
+        
+        stage('PUSH IMAGE') {
+            steps {
+                sh "docker push $IMAGE_NAME"
             }
         }
     }
-post{
-    always{
-        sh 'docker logout'
-    }
+    
+    post {
+        always {
+            sh 'docker logout'
+        }
     }
 }
