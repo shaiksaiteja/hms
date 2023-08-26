@@ -28,8 +28,6 @@ pipeline {
         }
     }
 }
-
-
         stage('PUSH IMAGE') {
             steps {
                 sh "docker push $IMAGE_NAME"
