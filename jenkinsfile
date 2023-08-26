@@ -22,11 +22,12 @@ pipeline {
         
         stage('LOGIN TO DOCKERHUB') {
     steps {
-        withCredentials([string(credentialsId: 'saiteja_jen_docker', variable: 'DOCKERHUB_CREDENTIALS_PSW')]) {
-            sh "echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u \$DOCKERHUB_CREDENTIALS_USR --password-stdin"
+        withCredentials([usernamePassword(credentialsId: 'saiteja_jen_docker', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW')]) {
+            sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW"
         }
     }
 }
+
 
         stage('PUSH IMAGE') {
             steps {
