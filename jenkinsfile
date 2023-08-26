@@ -4,7 +4,6 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('saiteja_jen_docker')
         IMAGE_NAME = "shaiksaiteja/ibmproject:${env.BUILD_NUMBER}"
     }
-#configuration of stages & steps
 
     stages {
         stage('SCM Checkout') 
