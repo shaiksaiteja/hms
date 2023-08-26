@@ -6,7 +6,7 @@ pipeline {
     }
 
     stages {
-        stage('SCM Checkout') 
+        stage('SCM Checkout') {
             steps {
                 git url: 'https://github.com/shaiksaiteja/hms', branch: 'main'
             }
