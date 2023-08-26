@@ -1,4 +1,3 @@
-#jenkins file  written by saiteja
 pipeline {
     agent any
     environment {
