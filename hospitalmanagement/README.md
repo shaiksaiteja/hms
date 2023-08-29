@@ -39,6 +39,7 @@
 - Install Python(3.7.6) (Dont Forget to Tick Add to Path while installing Python)
 - Open Terminal and Execute Following Commands :
 ```
+pip install ibm_db
 pip install django==3.0.5
 pip install django-widget-tweaks
 pip install xhtml2pdf
