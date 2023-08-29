@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required,user_passes_test
 from datetime import datetime,timedelta,date
 from django.conf import settings
 from django.db.models import Q
+from .models import insert_db,admin_insert,doctor_insert,book_appointment_insert
 
 # Create your views here.
 def home_view(request):
@@ -37,11 +38,18 @@ def patientclick_view(request):
     return render(request,'hospital/patientclick.html')
 
 
-
-
 def admin_signup_view(request):
     form=forms.AdminSigupForm()
     if request.method=='POST':
+        #ibm_db insertion
+        firstname=request.POST['first_name']
+        lastname=request.POST['last_name']
+        username=request.POST['username']
+        password=request.POST['password']
+
+        print(admin_insert(firstname,lastname,username,password))
+
+        #sqllite3 insertion
         form=forms.AdminSigupForm(request.POST)
         if form.is_valid():
             user=form.save()
@@ -53,13 +61,24 @@ def admin_signup_view(request):
     return render(request,'hospital/adminsignup.html',{'form':form})
 
 
-
-
 def doctor_signup_view(request):
     userForm=forms.DoctorUserForm()
     doctorForm=forms.DoctorForm()
     mydict={'userForm':userForm,'doctorForm':doctorForm}
     if request.method=='POST':
+        #idb_insert
+        firstname=request.POST['first_name']
+        lastname=request.POST['last_name']
+        username=request.POST['username']
+        password=request.POST['password']
+        department=request.POST['department']
+        mobile=request.POST['mobile']
+        address=request.POST['address']
+        profilepic=request.FILES['profile_pic']
+
+        print(doctor_insert(firstname,lastname,username,password,department,mobile,address,profilepic))
+
+        #sqllite3 insert
         userForm=forms.DoctorUserForm(request.POST)
         doctorForm=forms.DoctorForm(request.POST,request.FILES)
         if userForm.is_valid() and doctorForm.is_valid():
@@ -80,6 +99,20 @@ def patient_signup_view(request):
     patientForm=forms.PatientForm()
     mydict={'userForm':userForm,'patientForm':patientForm}
     if request.method=='POST':
+        #ibm database table insertion
+        firstname=request.POST['first_name']
+        username=request.POST['username']
+        address=request.POST['address']
+        symptoms=request.POST['symptoms']
+        profilepic=request.FILES['profile_pic']
+        lastname=request.POST['last_name']
+        password=request.POST['password']
+        mobile=request.POST['mobile']
+        doctorid=request.POST['assignedDoctorId']
+
+        print(insert_db(firstname,lastname,username,password,address,mobile,symptoms,doctorid,profilepic))
+
+        #sqllite3 insertion
         userForm=forms.PatientUserForm(request.POST)
         patientForm=forms.PatientForm(request.POST,request.FILES)
         if userForm.is_valid() and patientForm.is_valid():
@@ -94,10 +127,6 @@ def patient_signup_view(request):
             my_patient_group[0].user_set.add(user)
         return HttpResponseRedirect('patientlogin')
     return render(request,'hospital/patientsignup.html',context=mydict)
-
-
-
-
 
 
 #-----------for checking user is doctor , patient or admin(by sumit)
@@ -326,8 +355,6 @@ def update_patient_view(request,pk):
 
 
 
-
-
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_add_patient_view(request):
@@ -353,7 +380,6 @@ def admin_add_patient_view(request):
 
         return HttpResponseRedirect('admin-view-patient')
     return render(request,'hospital/admin_add_patient.html',context=mydict)
-
 
 
 #------------------FOR APPROVING PATIENT BY ADMIN----------------------
@@ -498,7 +524,6 @@ def admin_appointment_view(request):
 def admin_view_appointment_view(request):
     appointments=models.Appointment.objects.all().filter(status=True)
     return render(request,'hospital/admin_view_appointment.html',{'appointments':appointments})
-
 
 
 @login_required(login_url='adminlogin')
@@ -714,6 +739,9 @@ def patient_book_appointment_view(request):
     if request.method=='POST':
         appointmentForm=forms.PatientAppointmentForm(request.POST)
         if appointmentForm.is_valid():
+            description=request.POST['description']
+            doctorId=request.POST['doctorId']
+            print(book_appointment_insert(description,doctorId))
             print(request.POST.get('doctorId'))
             desc=request.POST.get('description')
 
@@ -819,5 +847,4 @@ def contactus_view(request):
 #---------------------------------------------------------------------------------
 #------------------------ ADMIN RELATED VIEWS END ------------------------------
 #---------------------------------------------------------------------------------
-
 

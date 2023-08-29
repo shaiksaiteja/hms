@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import ibm_db
 
 
 
@@ -76,3 +77,40 @@ class PatientDischargeDetails(models.Model):
     OtherCharge=models.PositiveIntegerField(null=False)
     total=models.PositiveIntegerField(null=False)
 
+
+def insert_db(firstname,lastname,username,password,address,mobile,symptoms,doctorid,profilepic):
+    conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=125f9f61-9715-46f9-9399-c8177b21803b.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=30426;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=gnz67912;PWD=ReQhMGBICOC8744Z", '', '')
+    if conn:
+        sql= "INSERT into PATIENTSIGNUP VALUES('{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(firstname,lastname,username,password,address,mobile,symptoms,doctorid,profilepic)
+        stmt = ibm_db.exec_immediate(conn, sql)
+        return "Number of affected rows: ", ibm_db.num_rows(stmt)
+    else:
+        return 'Data is not submitted'
+
+def admin_insert(firstname,lastname,username,password):
+    conn=ibm_db.connect("DATABASE=bludb;HOSTNAME=125f9f61-9715-46f9-9399-c8177b21803b.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=30426;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=gnz67912;PWD=ReQhMGBICOC8744Z", '', '')
+    if conn:
+        sql="insert into ADMINSIGNUP VALUES('{}','{}','{}','{}')".format(firstname,lastname,username,password)
+        stmt=ibm_db.exec_immediate(conn,sql)
+        return "Number of rows effected:",ibm_db.num_rows(stmt)
+    else:
+        return "Data is not submitted"
+
+def doctor_insert(firstname,lastname,username,password,department,mobile,address,profilepic):
+    conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=125f9f61-9715-46f9-9399-c8177b21803b.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=30426;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=gnz67912;PWD=ReQhMGBICOC8744Z", '', '')
+    if conn:
+        sql= "INSERT into DOCTORSIGNUP VALUES('{}','{}','{}','{}','{}','{}','{}','{}')".format(firstname,lastname,username,password,department,mobile,address,profilepic)
+        stmt = ibm_db.exec_immediate(conn, sql)
+        return "Number of affected rows: ", ibm_db.num_rows(stmt)
+    else:
+        return 'Data is not submitted'
+    
+
+def book_appointment_insert(description,doctorId):
+    conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=125f9f61-9715-46f9-9399-c8177b21803b.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=30426;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=gnz67912;PWD=ReQhMGBICOC8744Z", '', '')
+    if conn:
+        sql= "INSERT into BOOKAPPOINTMENT VALUES('{}','{}')".format(description,doctorId)
+        stmt = ibm_db.exec_immediate(conn, sql)
+        return "Number of affected rows: ", ibm_db.num_rows(stmt)
+    else:
+        return 'Data is not submitted'
