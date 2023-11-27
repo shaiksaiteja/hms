@@ -29,8 +29,9 @@ pipeline {
 }
         stage('PUSH IMAGE') {
             steps {
-                sh "docker push $IMAGE_NAME"
-            }
+ sh             "docker push $IMAGE_NAME"
+                // Run the Docker container after pushing the image
+                sh "docker run -p 8000:8000 $IMAGE_NAME"            }
         }
     }
     
